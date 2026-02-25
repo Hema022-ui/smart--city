@@ -1,28 +1,41 @@
 import { useState } from 'react'
-import './App.css'
-import Login from './components/Login'
 import AdminDashboard from './components/AdminDashboard'
 import UserDashboard from './components/UserDashboard'
+import Login from './components/Login'
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null)
+  const [user, setUser] = useState(null)
 
-  const handleLogout = () => {
-    setCurrentUser(null)
-  }
+  // ✅ Shared global state
+  const [issues, setIssues] = useState([])
+  const [feedback, setFeedback] = useState([])
 
-  if (!currentUser) {
-    return <Login onLogin={setCurrentUser} />
+  const handleLogout = () => setUser(null)
+
+  if (!user) {
+    return <Login onLogin={setUser} />
   }
 
   return (
-    <div className="app-container">
-      {currentUser.role === 'admin' ? (
-        <AdminDashboard user={currentUser} onLogout={handleLogout} />
+    <>
+      {user.role === 'admin' ? (
+        <AdminDashboard
+          user={user}
+          onLogout={handleLogout}
+          issues={issues}
+          feedback={feedback}
+        />
       ) : (
-        <UserDashboard user={currentUser} onLogout={handleLogout} />
+        <UserDashboard
+          user={user}
+          onLogout={handleLogout}
+          issues={issues}
+          setIssues={setIssues}
+          feedback={feedback}
+          setFeedback={setFeedback}
+        />
       )}
-    </div>
+    </>
   )
 }
 

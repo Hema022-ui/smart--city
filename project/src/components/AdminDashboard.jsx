@@ -1,14 +1,9 @@
 import { useState } from 'react'
 import '../styles/Dashboard.css'
-import { publicServices, infrastructure, amenities, issueReports, feedbackList } from '../data/cityData'
+import { publicServices, infrastructure, amenities } from '../data/cityData'
 
-const AdminDashboard = ({ user, onLogout }) => {
+const AdminDashboard = ({ user, onLogout, issues, feedback }) => {
   const [activeTab, setActiveTab] = useState('services')
-  const [services, setServices] = useState(publicServices)
-  const [infra, setInfra] = useState(infrastructure)
-  const [amen, setAmen] = useState(amenities)
-  const [issues, setIssues] = useState(issueReports)
-  const [feedback, setFeedback] = useState(feedbackList)
 
   return (
     <div className="dashboard">
@@ -17,7 +12,9 @@ const AdminDashboard = ({ user, onLogout }) => {
           <h1>Smart City Admin Portal</h1>
           <div className="user-section">
             <span className="user-name">Admin: {user.username}</span>
-            <button onClick={onLogout} className="logout-button">Logout</button>
+            <button onClick={onLogout} className="logout-button">
+              Logout
+            </button>
           </div>
         </div>
       </header>
@@ -28,26 +25,30 @@ const AdminDashboard = ({ user, onLogout }) => {
             className={activeTab === 'services' ? 'active' : ''}
             onClick={() => setActiveTab('services')}
           >
-            Public Services ({services.length})
+            Public Services ({publicServices.length})
           </button>
+
           <button
             className={activeTab === 'infrastructure' ? 'active' : ''}
             onClick={() => setActiveTab('infrastructure')}
           >
-            Infrastructure ({infra.length})
+            Infrastructure ({infrastructure.length})
           </button>
+
           <button
             className={activeTab === 'amenities' ? 'active' : ''}
             onClick={() => setActiveTab('amenities')}
           >
-            Amenities ({amen.length})
+            Amenities ({amenities.length})
           </button>
+
           <button
             className={activeTab === 'issues' ? 'active' : ''}
             onClick={() => setActiveTab('issues')}
           >
             Issue Reports ({issues.length})
           </button>
+
           <button
             className={activeTab === 'feedback' ? 'active' : ''}
             onClick={() => setActiveTab('feedback')}
@@ -57,29 +58,23 @@ const AdminDashboard = ({ user, onLogout }) => {
         </nav>
 
         <div className="dashboard-main">
+
+          {/* ✅ PUBLIC SERVICES */}
           {activeTab === 'services' && (
             <div className="content-section">
-              <div className="section-header">
-                <h2>Public Services</h2>
-              </div>
+              <h2>Public Services</h2>
               <div className="card-grid">
-                {services.map(service => (
+                {publicServices.map(service => (
                   <div key={service.id} className="info-card">
                     <div className="card-header">
                       <h3>{service.name}</h3>
                       <span className="badge">{service.category}</span>
                     </div>
                     <div className="card-body">
-                      <p className="description">{service.description}</p>
-                      <div className="info-row">
-                        <strong>Address:</strong> {service.address}
-                      </div>
-                      <div className="info-row">
-                        <strong>Phone:</strong> {service.phone}
-                      </div>
-                      <div className="info-row">
-                        <strong>Hours:</strong> {service.hours}
-                      </div>
+                      <p>{service.description}</p>
+                      <div><strong>Address:</strong> {service.address}</div>
+                      <div><strong>Phone:</strong> {service.phone}</div>
+                      <div><strong>Hours:</strong> {service.hours}</div>
                     </div>
                   </div>
                 ))}
@@ -87,28 +82,27 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* ✅ INFRASTRUCTURE */}
           {activeTab === 'infrastructure' && (
             <div className="content-section">
-              <div className="section-header">
-                <h2>Infrastructure</h2>
-              </div>
+              <h2>Infrastructure</h2>
               <div className="card-grid">
-                {infra.map(item => (
+                {infrastructure.map(item => (
                   <div key={item.id} className="info-card">
                     <div className="card-header">
                       <h3>{item.name}</h3>
-                      <span className={`badge ${item.status === 'Operational' ? 'badge-success' : 'badge-warning'}`}>
+                      <span className={`badge ${
+                        item.status === 'Operational'
+                          ? 'badge-success'
+                          : 'badge-warning'
+                      }`}>
                         {item.status}
                       </span>
                     </div>
                     <div className="card-body">
-                      <p className="description">{item.description}</p>
-                      <div className="info-row">
-                        <strong>Type:</strong> {item.type}
-                      </div>
-                      <div className="info-row">
-                        <strong>Capacity:</strong> {item.capacity}
-                      </div>
+                      <p>{item.description}</p>
+                      <div><strong>Type:</strong> {item.type}</div>
+                      <div><strong>Capacity:</strong> {item.capacity}</div>
                     </div>
                   </div>
                 ))}
@@ -116,29 +110,22 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* ✅ AMENITIES */}
           {activeTab === 'amenities' && (
             <div className="content-section">
-              <div className="section-header">
-                <h2>Amenities</h2>
-              </div>
+              <h2>Amenities</h2>
               <div className="card-grid">
-                {amen.map(amenity => (
+                {amenities.map(amenity => (
                   <div key={amenity.id} className="info-card">
                     <div className="card-header">
                       <h3>{amenity.name}</h3>
                       <span className="badge">{amenity.type}</span>
                     </div>
                     <div className="card-body">
-                      <p className="description">{amenity.description}</p>
-                      <div className="info-row">
-                        <strong>Location:</strong> {amenity.location}
-                      </div>
-                      <div className="info-row">
-                        <strong>Features:</strong> {amenity.features}
-                      </div>
-                      <div className="info-row">
-                        <strong>Hours:</strong> {amenity.hours}
-                      </div>
+                      <p>{amenity.description}</p>
+                      <div><strong>Location:</strong> {amenity.location}</div>
+                      <div><strong>Features:</strong> {amenity.features}</div>
+                      <div><strong>Hours:</strong> {amenity.hours}</div>
                     </div>
                   </div>
                 ))}
@@ -146,14 +133,13 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* ✅ ISSUES (LIVE DATA) */}
           {activeTab === 'issues' && (
             <div className="content-section">
-              <div className="section-header">
-                <h2>Issue Reports</h2>
-              </div>
+              <h2>Issue Reports</h2>
               {issues.length === 0 ? (
                 <div className="empty-state">
-                  <p>No issue reports at the moment</p>
+                  <p>No issues reported</p>
                 </div>
               ) : (
                 <div className="list-view">
@@ -169,14 +155,13 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* ✅ FEEDBACK (LIVE DATA) */}
           {activeTab === 'feedback' && (
             <div className="content-section">
-              <div className="section-header">
-                <h2>User Feedback</h2>
-              </div>
+              <h2>User Feedback</h2>
               {feedback.length === 0 ? (
                 <div className="empty-state">
-                  <p>No feedback received yet</p>
+                  <p>No feedback received</p>
                 </div>
               ) : (
                 <div className="list-view">
@@ -184,7 +169,9 @@ const AdminDashboard = ({ user, onLogout }) => {
                     <div key={item.id} className="list-item">
                       <h3>{item.amenity}</h3>
                       <p>{item.comment}</p>
-                      <div className="rating">Rating: {item.rating}/5</div>
+                      <div className="rating">
+                        Rating: {item.rating}/5
+                      </div>
                       <span className="timestamp">{item.date}</span>
                     </div>
                   ))}
@@ -192,6 +179,7 @@ const AdminDashboard = ({ user, onLogout }) => {
               )}
             </div>
           )}
+
         </div>
       </div>
     </div>
